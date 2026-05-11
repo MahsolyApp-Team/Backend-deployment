@@ -1,274 +1,128 @@
-Mahsoly Backend API
-Smart Agriculture Backend System powered by AI.
-Built with FastAPI to provide crop recommendation, plant disease detection, authentication, image handling, and intelligent agricultural services.
-
-Overview
-
-Mahsoly Backend acts as the core server for the Mahsoly platform.
-
-It handles:
-
-User authentication
-
-AI model communication
-
-Plant disease detection
-
-Crop recommendation
-
-fertilizer recommendation
-
-Image uploads
-
-Database management
-
-Scan history storage
-
-The backend communicates asynchronously with deployed AI models hosted on external servers such as Hugging Face Spaces.
-
-Features:
-
-JWT Authentication
-
-Plant Disease Detection
-
-Crop Recommendation System
-
-fertilizer recommendation System
-
-Cloudinary Image Upload
-
-SQLAlchemy ORM
-
-Async API Requests using HTTPX
-
-Swagger API Documentation
-
-Scan History Management
-
-
-Tech Stack:
-
-Python --> Main Programming Language
-
-FastAPI --> Backend Framework
-
-SQLAlchemy	--> ORM
-
-PostgreSQL -->	Database
-
-JWT	--> Authentication
-
-Pydantic -->	Validation
-
-HTTPX	--> Async HTTP Requests
-
-Cloudinary --> Image Hosting
-
-Uvicorn -->	ASGI Server
-
-
-Before running this project, make sure you have the following installed.
-
-1-Programming Languages: Python3.10+
-
-2-Frameworks & Libraries:
-
-fastapi
-
-uvicorn
-
-sqlalchemy
-
-pydantic
-
-python-jose
-
-passlib
-
-bcrypt
-
-httpx
-
-cloudinary
-
-python-dotenv
-
-python-multipart
-
-
-Install all dependencies using: pip install -r requirements.txt
-
-Required Software & Tools:
-
-Git	--> Version Control
-
-Python	--> Runtime Environment
-
-pip	--> Package Manager
-
-PostgreSQL -->	Production Database
-
-System Requirements: 
-
-OS	--> Windows / Linux / macOS
-
-RAM	--> 4 GB
-
-Storage	--> 1 GB Free Space
-
-Internet	--> Required for AI APIs
-
-External Services : 
-
-Vercel --> APP Hosting
-
-Hugging Face --> Spaces	AI Model Hosting
-
-Cloudinary	--> Image Storage
-
-Installation Steps:
-
-1-Clone the Repository:
-
-git clone https://github.com/your-username/mahsoly-backend.git
-
-2-Create Virtual Environment (Windows):
-
-python -m venv venv
-
-3-Install Dependencies:
-
-pip install -r requirements.txt
-
-
-Environment Setup & Configuration:
-
-1-Create a .env file in the root directory.
-
-Environment Variables:
-
-SECRET_KEY	--> JWT Secret Key
-
-DATABASE_URL	--> Database Connection URL
-
-CLOUD_NAME	--> Cloudinary Cloud Name
-
-CLOUDINARY_API_KEY	--> Cloudinary API Key
-
-CLOUDINARY_API_SECRET	--> Cloudinary Secret
-
-CROP_API	--> Crop Recommendation Model API
-
-DISEASE_API	--> Disease Detection Model API
-
-fertilizer_API --> fertilizer Recommendation Model API
-
-2-Run Instructions:
-
+# Mahsoly Backend API
+
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.133.0-009688.svg?logo=fastapi)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+## 1. Project Title & Description
+
+**Mahsoly** is an AI-powered agricultural backend API built with FastAPI. It provides functionalities for plant disease detection, crop recommendation, and fertilizer recommendation using external AI models hosted on Hugging Face spaces. It also includes robust user authentication with OTP-based verification, password management, and email notifications. This backend supports the core features of the Mahsoly agricultural application.
+
+## 2. Features
+
+* **User Authentication**: Register, login, and secure JWT-based session management.
+* **OTP Verification**: Email-based OTP for account verification, password resets, and email changes.
+* **AI Plant Disease Detection**: Upload an image of a plant to detect diseases and receive confidence scores (powered by Hugging Face models and Cloudinary for image hosting).
+* **Crop Recommendation**: Receive crop suggestions based on environmental metrics (Nitrogen, Phosphorous, Potassium, temperature, humidity, pH, and rainfall).
+* **Fertilizer Recommendation**: Get fertilizer suggestions based on soil type, crop type, and field conditions.
+* **Scan History**: Stores a history of user scans, including image URLs, detected plant/disease names, and confidence scores.
+
+## 3. Tech Stack
+
+* **Framework**: [FastAPI](https://fastapi.tiangolo.com/)
+* **Database**: [SQLAlchemy](https://www.sqlalchemy.org/) (ORM), [Alembic](https://alembic.sqlalchemy.org/) (Migrations), PostgreSQL / SQLite
+* **Authentication**: [Passlib](https://passlib.readthedocs.io/) (bcrypt), [Python-JOSE](https://github.com/mpdavis/python-jose) (JWT)
+* **External Services**: 
+  * [Cloudinary](https://cloudinary.com/) (Image hosting)
+  * [Hugging Face Spaces](https://huggingface.co/) (AI Inference APIs)
+* **Utilities**: HTTPX (async HTTP requests), Pydantic (data validation)
+
+## 4. Installation
+
+Follow these steps to set up the project locally:
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/mahsoly_app.git
+   cd mahsoly_app
+   ```
+
+2. **Create a virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure Environment Variables**
+   Create a `.env` file in the root directory and add your configuration details. (Example based on the codebase):
+   ```env
+   DATABASE_URL=sqlite:///./mahsoly_app.db
+   # or for PostgreSQL: postgresql://user:password@localhost:5432/mahsoly_db
+   
+   SECRET_KEY=your_jwt_secret_key
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   
+   # Add your SMTP credentials for OTP emails if applicable
+   ```
+
+5. **Run Database Migrations**
+   ```bash
+   alembic upgrade head
+   ```
+
+## 5. Usage
+
+To start the development server, run:
+
+```bash
 uvicorn main:app --reload
+```
 
-AI Model Integration:
+The server will start at `http://127.0.0.1:8000`. You can access the interactive API documentation (Swagger UI) at `http://127.0.0.1:8000/docs`.
 
-The backend communicates with external AI models hosted on Hugging Face Spaces using asynchronous HTTP requests.
+### Key API Endpoints Example
 
-Workflow:
+* **Register a new user:**
+  ```bash
+  curl -X POST "http://127.0.0.1:8000/auth/register" \
+       -H "Content-Type: application/json" \
+       -d '{"name": "John Doe", "email": "john@example.com", "password": "securepassword"}'
+  ```
 
-Client Request
+* **Detect Plant Disease:**
+  Send a POST request to `/scan` with a Bearer token and an image file:
+  ```bash
+  curl -X POST "http://127.0.0.1:8000/scan" \
+       -H "Authorization: Bearer <your_token>" \
+       -F "file=@plant_image.jpg"
+  ```
 
-      ↓
-      
-FastAPI Backend
+## 6. Project Structure
 
-      ↓
-      
-AI Model API
+```text
+Mahsoly/
+├── .env                # Environment variables configuration
+├── main.py             # FastAPI entry point & app configuration
+├── models.py           # SQLAlchemy database models & Pydantic schemas
+├── database.py         # Database connection setup
+├── AI_models.py        # Endpoints for AI inferences (disease, crop, fertilizer)
+├── Authentication.py   # User authentication endpoints (register, login, OTP)
+├── security.py         # JWT and password hashing utilities
+├── verify.py           # Dependency to get current user from token
+├── upload.py           # Cloudinary image upload utility
+├── email_utils.py      # Email sending utilities for OTP
+├── alembic/            # Database migration scripts
+├── alembic.ini         # Alembic configuration
+└── requirements.txt    # Python dependencies
+```
 
-      ↓
-      
-Prediction Response
+## 7. Contributing
 
-      ↓
-      
-Database Storage
+We welcome contributions! To contribute to this project:
 
-      ↓
-      
-Return Final Result
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add amazing feature'`).
+4. Push to the branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request for review.
 
-_____________________________________________________________________________
+## 8. License
 
-Main API Endpoints:   
-
-POST	                      /register                  	
-
-POST                        /verify_otp                 
-
-POST                        /change_email               
-
-POST                        /confirm_email              
-
-PUT                         /change_password            
-POST	                      /login	                    
-
-POST	                      /predict-crop	              
-
-POST	                      /scan           	          
-
-POST                        /fertilizer_recommendation  
-
-Authentication:
-
-The project uses JWT Bearer Authentication.
-
-Example Authorization Header: Authorization: Bearer YOUR_ACCESS_TOKEN
-
-Image Upload Workflow:
-
-User Uploads Image
-
-        ↓
-        
-FastAPI Receives Image
-
-        ↓
-        
-Upload to Cloudinary
-
-        ↓
-        
-Send Image to AI Model
-
-        ↓
-        
-Store Result in Database
-
-        ↓
-        
-Return Prediction Response
-
- _____________________________________________________________________________
-
-Author:
-Ismail Abdalaziz Ibrahim
-
-Backend Developer | FastAPI Developer | AI Enthusiast
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+This project is licensed under the MIT License. *(Note: Ensure a `LICENSE` file is present in your repository's root directory to apply this license formally).*
