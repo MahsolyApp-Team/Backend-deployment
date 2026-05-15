@@ -34,7 +34,7 @@ Rules:
 - Only answer agriculture-related questions.
 - If the question is outside agriculture, politely refuse.
 - Answer in simple english.
-- Keep answers short and practical.
+- Keep answers short and practical. 
 """
 
 router = APIRouter()
