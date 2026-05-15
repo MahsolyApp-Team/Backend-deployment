@@ -22,51 +22,83 @@ async def scan_plant(
 ):
     try:
         contents = await file.read()
+        
         image_url = upload_image_to_cloudinary(contents)
+        
         async with httpx.AsyncClient() as client:
             response = await client.post(
                 REC_API,
-                files={"file": (file.filename, contents, file.content_type)},timeout=100.0
+                files={
+                    "file": (
+                        file.filename,
+                        contents,
+                        file.content_type
+                    )
+                },
+                timeout=100.0
             )
         if response.status_code != 200:
-            raise HTTPException(status_code=500, detail="API Model failed")
-        data = response.json()
-        if "prediction" not in data:
+            raise HTTPException(
+                status_code=500,
+                detail="AI Model API failed"
+            )
+        result = response.json()
+        
+        if "prediction" not in result:
             return {
-                "message": data.get("message"),
-                "tips": data.get("tips", [])
-    }
-        label = data.get("prediction")
-        confidence = data.get("confidence")
+                "message": result.get("message"),
+                "tips": result.get("tips", [])
+            }
+        
+        label = result.get("prediction")
+        confidence = result.get("confidence")
         plant_name = None
         disease_name = None
+        
         if label:
-            parts = label.split(" ", 1)  
+            parts = label.split(" ", 1)
             if len(parts) == 2:
                 plant_name = parts[0]
                 disease_name = parts[1]
+        
+        treatment_plan = result.get("treatment_plan", {})
+        symptoms = None
+        treatment = None
+        prevention = None
+        if isinstance(treatment_plan, dict):
+            symptoms = treatment_plan.get("symptoms")
+            treatment = treatment_plan.get("treatment")
+            prevention = treatment_plan.get("prevention")
+        elif isinstance(treatment_plan, str):
+            treatment = treatment_plan
+        
         new_scan = Scan(
             user_id=user.id,
             plant_name=plant_name,
             disease_name=disease_name,
             confidence=confidence,
-            created_at=datetime.now()
+            created_at=datetime.now(),
         )
         db.add(new_scan)
-        db.commit()
-        db.refresh(new_scan)
+        db.flush()
+        
         image = Scanimage(
             scan_id=new_scan.id,
             image_url=image_url
         )
         db.add(image)
         db.commit()
+        db.refresh(new_scan)
+        
         return {
             "scan_id": new_scan.id,
             "plant_name": plant_name,
             "disease_name": disease_name,
             "confidence": confidence,
-            "image_url": image_url
+            "image_url": image_url,
+            "symptoms": symptoms,
+            "treatment": treatment,
+            "prevention": prevention
         }
     except Exception as e:
         traceback.print_exc()
