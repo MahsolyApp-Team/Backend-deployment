@@ -16,7 +16,7 @@ router = APIRouter()
 
 REC_API = os.getenv("recommendation_model")
 Crop_API = os.getenv("crop_model")
-fertilizer_API = ("fertilizer_model")
+fertilizer_API = os.getenv("fertilizer_model")
 
 @router.post("/scan")
 async def scan_plant(
