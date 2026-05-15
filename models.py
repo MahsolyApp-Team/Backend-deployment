@@ -76,3 +76,6 @@ class fertilizer(BaseModel):
     Nitrogen: float
     Potassium: float 
     Phosphorous:float
+
+class Chatbot(BaseModel):
+    message: str
