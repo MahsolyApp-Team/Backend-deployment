@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, DateTime,Boolean, Foreign
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
-from pydantic import BaseModel
+from pydantic import BaseModel,EmailStr
 
 class User(Base):
     __tablename__ = "users"
@@ -17,6 +17,8 @@ class User(Base):
     otp_expiry = Column(DateTime, nullable=True)
     is_verified = Column(Boolean, default=False)
     new_email = Column(String, nullable=True) 
+    reset_otp = Column(String, nullable=True)
+    reset_otp_expiry = Column(DateTime, nullable=True)
 class Scan(Base):
     __tablename__ = "scans"
     id = Column(Integer, primary_key=True, index=True)
@@ -42,7 +44,7 @@ class CreateUser(BaseModel):
     password: str
     
 class LoginRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 class VerifyOTP(BaseModel):
     otp: str
@@ -53,7 +55,7 @@ class ChangePassword(BaseModel):
     confirm_new_password: str
 
 class ChangeEmailRequest(BaseModel):
-    new_email: str
+    new_email: EmailStr
 
 class change_email_otp(BaseModel):
     otp: str
@@ -79,3 +81,15 @@ class fertilizer(BaseModel):
 
 class Chatbot(BaseModel):
     message: str
+
+class ForgotPassword(BaseModel):
+    email: EmailStr
+    
+class VerifyResetOtp(BaseModel):
+    email: EmailStr
+    otp: str
+    
+class ResetPassword(BaseModel):
+    email:EmailStr
+    new_password: str
+    confirm_password: str
