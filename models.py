@@ -40,7 +40,7 @@ class Scanimage(Base):
     
 class CreateUser(BaseModel):
     name: str
-    email: str
+    email: EmailStr
     password: str
     
 class LoginRequest(BaseModel):
