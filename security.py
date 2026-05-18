@@ -8,8 +8,8 @@ load_dotenv(override=True)
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE = os.getenv("ACCESS_TOKEN_EXPIRE")
-REFRESH_TOKEN_EXPIRE = os.getenv("REFRESH_TOKEN_EXPIRE")
+ACCESS_TOKEN_EXPIRE = int(os.getenv("60"))
+REFRESH_TOKEN_EXPIRE = int(os.getenv("7"))
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_password(password: str) -> str:
